@@ -20,7 +20,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.traefik.entrypoints=http
       - traefik.http.routers.traefik.rule=Host("traefik.platform.allinone.io")
-      - traefik.http.middlewares.traefik-auth.basicauth.users=admin:$$apr1$$uK/5z0ft$$XcewbIF6ArWIrzdzjmsju1
       - traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https
       - traefik.http.routers.traefik.middlewares=traefik-https-redirect
       - traefik.http.routers.traefik-secure.entrypoints=https

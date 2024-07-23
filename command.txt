@@ -1,0 +1,3 @@
+openstack stack create --template openstack.yaml app \
+--parameter key='openstack' \
+--parameter NDD='platform.allinone.io'
