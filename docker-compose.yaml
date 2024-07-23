@@ -1,0 +1,34 @@
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - proxy
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./.traefik/traefik.yml:/traefik.yml:ro
+      - ./.traefik/acme.json:/acme.json
+      - ./.traefik/config.yml:/config.yml:ro
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik.entrypoints=http
+      - traefik.http.routers.traefik.rule=Host("traefik.platform.allinone.io")
+      - traefik.http.middlewares.traefik-auth.basicauth.users=admin:$$apr1$$uK/5z0ft$$XcewbIF6ArWIrzdzjmsju1
+      - traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.traefik.middlewares=traefik-https-redirect
+      - traefik.http.routers.traefik-secure.entrypoints=https
+      - traefik.http.routers.traefik-secure.rule=Host("traefik.platform.allinone.io")
+      - traefik.http.routers.traefik-secure.middlewares=traefik-auth
+      - traefik.http.routers.traefik-secure.tls=true
+      - traefik.http.routers.traefik-secure.tls.certresolver=http
+      - traefik.http.routers.traefik-secure.service=api@internal
+networks:
+  proxy:
+    external: true
