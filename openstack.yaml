@@ -119,9 +119,10 @@ resources:
                         systemctl enable docker
                         systemctl start docker
                         git clone https://github.com/sebdeleze/openstack.git app
+                        chmod 600 /app/.traefik/acme.json
                         cd /app
                         docker network create proxy
-                        docker-compose up -d
+                        docker compose up -d
 
                         wc_notify --data-binary '{"status": "SUCCESS"}'
 
