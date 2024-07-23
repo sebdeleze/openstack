@@ -24,9 +24,6 @@ parameters:
         type: string
         description: UUID of a Neutron external network
         default: ext-floating1
-    EMAIL:
-        type: string
-        description: Email for Let's Encrypt
     NDD:
         type: string
         description: Domain for URL (example.com)
@@ -123,7 +120,7 @@ resources:
                         systemctl start docker
                         mkdir -p /app
                         cd /app
-                        git clone 
+                        git clone https://github.com/sebdeleze/openstack.git
                         docker network create proxy
                         docker-compose -f /apps/traefik/docker-compose.yml up -d
 
@@ -143,18 +140,10 @@ outputs:
                     PASSWORD: { get_attr: [random_password_traefik, value] }
         description: 'Traefik URL'
 
-    portainer_url:
-        value:
-            str_replace:
-                template: https://portainer.NDD
-                params:
-                    NDD: { get_param: NDD }
-        description: 'Portainer URL'
-
     server_IP:
         value:
             str_replace:
-                template: /!\ Don't forget to redirect traefik.NDD and portainer.NDD to IP !
+                template: /!\ Don't forget to redirect traefik.NDD to IP !
                 params:
                     NDD: { get_param: NDD }
                     IP: { get_attr: [docker_floating, floating_ip_address] }
