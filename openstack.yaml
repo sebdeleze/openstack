@@ -118,11 +118,10 @@ resources:
                         apt-get -y install docker-ce docker-compose
                         systemctl enable docker
                         systemctl start docker
-                        mkdir -p /app
+                        git clone https://github.com/sebdeleze/openstack.git app
                         cd /app
-                        git clone https://github.com/sebdeleze/openstack.git
                         docker network create proxy
-                        docker-compose -f /apps/traefik/docker-compose.yml up -d
+                        docker-compose up -d
 
                         wc_notify --data-binary '{"status": "SUCCESS"}'
 
@@ -134,10 +133,9 @@ outputs:
     traefik_url:
         value:
             str_replace:
-                template: https://traefik.NDD (admin / PASSWORD)
+                template: https://traefik.NDD
                 params:
                     NDD: { get_param: NDD }
-                    PASSWORD: { get_attr: [random_password_traefik, value] }
         description: 'Traefik URL'
 
     server_IP:
